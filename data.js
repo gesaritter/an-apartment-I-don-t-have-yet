@@ -13,7 +13,7 @@
 // Change these whenever you like.
 // ---------------------------------------------------------------
 const SITE_CONFIG = {
-  eyebrow: "a little collection",
+  eyebrow: "Finds Archive",
   title: "Things I don't have space in my apartment for but I wish I did",
   tagline:
     "ebay kleinanzeigen & vinted finds i keep thinking about and either don't have the space or money for :(",
