@@ -42,7 +42,7 @@ html, body {
 .site-header {
   position: relative;
   overflow: hidden;
-  padding: 2.5rem 1.75rem 3rem;
+  padding: 2.5rem 1.75rem 4rem;
   background: var(--blue);
   border-bottom: 1px solid var(--blue-line);
 }
@@ -56,7 +56,7 @@ html, body {
   font-size: clamp(4rem, 16vw, 11rem);
   line-height: 0.82;
   color: var(--blue-mid);
-  opacity: 0.55;
+  opacity: 0.38;
   text-transform: uppercase;
   text-align: right;
   pointer-events: none;
@@ -109,13 +109,12 @@ html, body {
   text-transform: uppercase;
   color: var(--cream);
   margin: 0;
-  line-height: 0.86;
-  letter-spacing: -0.01em;
-}
-
-.site-title .title-line {
-  display: block;
-  font-size: clamp(3.2rem, 9vw, 6.5rem);
+  /* Starting size â€” app.js then measures the real font and scales this up so
+     the headline fills the width across a few lines, whatever its length. */
+  font-size: clamp(2.9rem, 10vw, 9rem);
+  line-height: 1.06;
+  letter-spacing: 0.015em;
+  overflow-wrap: break-word;
 }
 
 .tagline {
@@ -182,6 +181,109 @@ html, body {
   color: var(--cream);
 }
 
+/* ---------- moodboard band ---------- */
+.moodboard {
+  position: relative;
+  padding: 3.25rem 0 0;
+  border-bottom: 1px solid var(--blue-line);
+}
+
+.moodboard-head {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.moodboard-head h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  color: var(--cream);
+  margin: 0;
+  line-height: 1;
+}
+
+.moodboard-head p {
+  margin: 0;
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cream-dim);
+  max-width: 30ch;
+}
+
+.moodboard-strip {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* keep the blend contained to this band */
+  height: clamp(160px, 24vw, 340px);
+  /* soften both ends so the strip melts into the blue */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+
+.moodboard-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: mood-drift 80s linear infinite;
+}
+
+.moodboard-track img {
+  display: block;
+  height: 100%;
+  width: auto;
+  flex: 0 0 auto;
+  filter: contrast(1.04);
+}
+
+@keyframes mood-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* blue duotone wash that lifts when you hover the band */
+.moodboard-strip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  mix-blend-mode: color;
+  opacity: 0.85;
+  transition: opacity 0.55s ease;
+  pointer-events: none;
+}
+
+.moodboard:hover .moodboard-strip::after { opacity: 0; }
+.moodboard:hover .moodboard-track { animation-play-state: paused; }
+
+.moodboard-hint {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.85rem 1.75rem 1.75rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+}
+
+/* Touch devices can't hover, so show it closer to full colour there and drop
+   the hint rather than leaving the reveal unreachable. */
+@media (hover: none) {
+  .moodboard-strip::after { opacity: 0.28; }
+  .moodboard-hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moodboard-track { animation: none; }
+}
+
 /* ---------- main ---------- */
 main {
   max-width: 1200px;
@@ -233,330 +335,6 @@ main {
 
 /* ---------- section label ---------- */
 .section-label {
-  display: flex;
-  align-items: baseline;
-  gap: 0.85rem;
-  margin-bottom: 1.75rem;
-}
-
-.section-index {
-  font-family: var(--font-body);
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--blue-deepest);
-  background: var(--cream);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-}
-
-.section-label h2 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  color: var(--cream);
-  margin: 0;
-  line-height: 1;
-}
-
-/* ---------- controls ---------- */
-.controls {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-
-.search-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: var(--blue-deepest);
-  opacity: 0.5;
-}
-
-#search {
-  width: 100%;
-  padding: 0.85rem 1rem 0.85rem 2.6rem;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--blue-line);
-  background: var(--cream-card);
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  color: var(--ink);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-#search:focus {
-  border-color: var(--cream);
-  box-shadow: 0 0 0 3px rgba(247, 225, 218, 0.18);
-}
-#search::placeholder { color: var(--ink-soft); }
-
-.pills, .chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.pill, .chip {
-  border: 2px solid var(--cream);
-  background: transparent;
-  color: var(--cream);
-  font-family: var(--font-body);
-  font-weight: 800;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.pill:hover, .chip:hover {
-  background: rgba(247, 225, 218, 0.12);
-}
-
-.pill.active, .chip.active {
-  background: var(--cream);
-  color: var(--blue-deepest);
-}
-
-/* ---------- masonry grid ---------- */
-.grid {
-  column-count: 1;
-  column-gap: 1.5rem;
-}
-
-@media (min-width: 620px) {
-  .grid { column-count: 2; }
-}
-@media (min-width: 920px) {
-  .grid { column-count: 3; }
-}
-@media (min-width: 1220px) {
-  .grid { column-count: 4; }
-}
-
-.card {
-  display: inline-block;
-  width: 100%;
-  break-inside: avoid;
-  margin-bottom: 1.5rem;
-  background: var(--cream-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line-card);
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  opacity: 0;
-  animation: fade-up 0.5s ease forwards;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -16px rgba(16, 22, 58, 0.4);
-}
-
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.card-media {
-  position: relative;
-  width: 100%;
-  background: var(--blue-light);
-}
-
-.card-media img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.card-media.placeholder {
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.4rem;
-  background: linear-gradient(135deg, var(--blue-light), var(--blue-mid));
-}
-
-.badge {
-  position: absolute;
-  top: 0.7rem;
-  left: 0.7rem;
-  font-family: var(--font-body);
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.35rem 0.65rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-.badge.ebay {
-  background: var(--blue-deepest);
-  color: var(--cream);
-}
-.badge.vinted {
-  background: var(--cream-card);
-  color: var(--blue-deepest);
-  border: 1.5px solid var(--blue-deepest);
-}
-.badge.other {
-  background: var(--ink);
-  color: var(--cream);
-}
-
-.card-body {
-  padding: 1.15rem 1.25rem 1.35rem;
-}
-
-.card-title {
-  font-family: var(--font-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: 1.3rem;
-  line-height: 1;
-  margin: 0 0 0.55rem;
-  color: var(--ink);
-}
-
-.card-price {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.6rem;
-  color: var(--blue);
-  margin-bottom: 0.7rem;
-  line-height: 1;
-}
-
-.card-note {
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: var(--ink-soft);
-  line-height: 1.5;
-  margin: 0 0 0.85rem;
-  padding-left: 0.7rem;
-  border-left: 3px solid var(--blue-deepest);
-}
-
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
-}
-
-.tag {
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--blue);
-  background: rgba(9, 32, 233, 0.09);
-  padding: 0.24rem 0.55rem;
-  border-radius: 5px;
-}
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.card-date {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--ink-soft);
-}
-
-.card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-body);
-  font-weight: 800;
-  font-size: 0.78rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--cream);
-  background: var(--blue-deepest);
-  padding: 0.55rem 0.9rem;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  transition: background 0.15s ease;
-  white-space: nowrap;
-}
-
-.card-link:hover {
-  background: var(--blue);
-}
-
-/* ---------- empty state ---------- */
-.empty-state {
-  text-align: center;
-  padding: 4rem 1rem;
-  color: var(--cream-dim);
-}
-.empty-state code {
-  background: var(--blue-mid);
-  color: var(--cream);
-  padding: 0.15rem 0.4rem;
-  border-radius: 6px;
-}
-.empty-emoji {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-/* ---------- footer ---------- */
-.site-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 2rem 1.75rem 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: var(--cream-dim);
-  border-top: 1px solid var(--blue-line);
-}
-
-.footer-right {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.site-footer a {
-  color: var(--cream);
-  text-decoration: none;
-  border-bottom: 1.5px solid var(--cream);
-  padding-bottom: 1px;
-}
-.site-footer a:hover { opacity: 0.8; }.section-label {
   display: flex;
   align-items: baseline;
   gap: 0.85rem;
