@@ -114,7 +114,7 @@ html, body {
   font-size: clamp(2.9rem, 10vw, 9rem);
   line-height: 1.06;
   letter-spacing: 0.5rem;
-  overflow-wrap: break-word;
+  space-between: break-word;
 }
 
 .tagline {
