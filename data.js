@@ -43,48 +43,6 @@ const SITE_CONFIG = {
 // ---------------------------------------------------------------
 
 const FINDS = [
-  {
-    title: "Rattan armchair with cushion",
-    source: "eBay Kleinanzeigen",
-    link: "https://www.ebay-kleinanzeigen.de/",
-    price: "45 €",
-    image: "https://picsum.photos/seed/rattan-chair/600/750",
-    note: "Would look so good tucked into a corner with a chunky knit throw. Still thinking about this one.",
-    tags: ["living room", "boho", "seating"],
-    dateAdded: "2026-08-05",
-  },
-  {
-    title: "Fluted glass vase, small",
-    source: "Vinted",
-    link: "https://www.vinted.de/",
-    price: "8 €",
-    image: "https://picsum.photos/seed/fluted-vase/600/500",
-    note: "The fluting catches the light so nicely — perfect for one dried stem.",
-    tags: ["decor", "glassware"],
-    dateAdded: "2026-08-03",
-  },
-  {
-    title: "Vintage brass floor lamp",
-    source: "eBay Kleinanzeigen",
-    link: "https://www.ebay-kleinanzeigen.de/",
-    price: "70 €",
-    image: "https://picsum.photos/seed/brass-lamp/600/800",
-    note: "Warm brass + a linen shade. Dreaming of the light this would throw in the evening.",
-    tags: ["lighting", "living room"],
-    dateAdded: "2026-07-29",
-  },
-  {
-    title: "Boucle throw pillow, cream",
-    source: "Vinted",
-    link: "https://www.vinted.de/",
-    price: "12 €",
-    image: "",
-    note: "So soft in the photos. Would be the first thing on a reading chair.",
-    tags: ["textiles", "living room"],
-    dateAdded: "2026-07-20",
-  },
-
-  // ---------------------------------------------------------------
     {
     title: "SPIEGEL sehr gross 170x300 cm",
     source: "eBay Kleinanzeigen",
