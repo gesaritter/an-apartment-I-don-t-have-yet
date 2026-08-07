@@ -14,7 +14,7 @@
 // ---------------------------------------------------------------
 const SITE_CONFIG = {
   eyebrow: "Finds Archive",
-  title: "Things I don't have space in my apartment for but I wish I did",
+  title: "Things I wish I had space for",
   tagline:
     "ebay kleinanzeigen & vinted finds i keep thinking about and either don't have the space or money for :(",
   curatedBy: "Gesa",
