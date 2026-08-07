@@ -105,16 +105,16 @@ html, body {
 
 .site-title {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   text-transform: uppercase;
   color: var(--cream);
-  margin: 1;
+  margin: 0;
   /* Starting size â€” app.js then measures the real font and scales this up so
      the headline fills the width across a few lines, whatever its length. */
   font-size: clamp(2.9rem, 10vw, 9rem);
   line-height: 1.06;
-  letter-spacing: 0.5rem;
-  space-between: break-word;
+  letter-spacing: 0.015em;
+  overflow-wrap: break-word;
 }
 
 .tagline {
