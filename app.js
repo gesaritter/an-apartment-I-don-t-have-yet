@@ -27,12 +27,9 @@
 
     const title = cfg.title || "Finds Archive";
     document.title = title;
-    const titleEl = document.getElementById("site-title");
-    // split into words, each on its own oversized line (poster-style stack)
-    titleEl.innerHTML = title
-      .split(" ")
-      .map((word) => `<span class="title-line">${escapeHTML(word)}</span>`)
-      .join("");
+    // Let the headline wrap naturally across the full width — forcing one word
+    // per line falls apart as soon as the title is more than a couple of words.
+    document.getElementById("site-title").textContent = title;
 
     if (cfg.tagline) document.getElementById("site-tagline").textContent = cfg.tagline;
     if (cfg.curatedBy) document.getElementById("curated-by").textContent = cfg.curatedBy;
@@ -44,6 +41,52 @@
     const ghostEl = document.getElementById("ghost-text");
     ghostEl.innerHTML = `<span class="title-line">${escapeHTML(ghostWord)}</span><span class="title-line">${escapeHTML(ghostWord)}</span>`;
   }
+
+  // ---- headline sizing ----
+  // Font metrics differ wildly between typefaces, so rather than hard-coding a
+  // size we measure the rendered headline and binary-search the largest size
+  // that still (a) keeps every word on the line and (b) stays within a sensible
+  // number of lines. Long titles fill the width; short ones stay in proportion.
+  const TITLE_LINE_HEIGHT = 1.06;
+
+  function fitTitle() {
+    const el = document.getElementById("site-title");
+    if (!el || !el.textContent.trim()) return;
+
+    const vw = window.innerWidth;
+    const maxLines = vw >= 1000 ? 3 : vw >= 620 ? 4 : 5;
+    const cap = Math.min(vw * 0.17, 190);
+    const floor = 26;
+
+    el.style.lineHeight = String(TITLE_LINE_HEIGHT);
+
+    let lo = floor;
+    let hi = Math.max(cap, floor + 1);
+    let best = floor;
+
+    for (let i = 0; i < 24 && hi - lo > 0.5; i++) {
+      const mid = (lo + hi) / 2;
+      el.style.fontSize = mid + "px";
+
+      const noOverflow = el.scrollWidth <= el.clientWidth + 1;
+      const lines = Math.round(el.getBoundingClientRect().height / (mid * TITLE_LINE_HEIGHT));
+
+      if (noOverflow && lines <= maxLines) {
+        best = mid;
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+
+    el.style.fontSize = Math.floor(best) + "px";
+  }
+
+  let resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(fitTitle, 120);
+  });
 
   function badgeClass(source) {
     const s = (source || "").toLowerCase();
@@ -197,4 +240,11 @@
 
   applySiteConfig();
   render();
+
+  fitTitle();
+  // re-measure once the display font has actually loaded, since its metrics
+  // are what the sizing depends on
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitTitle).catch(function () {});
+  }
 })();
