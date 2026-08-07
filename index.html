@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Finds Archive</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪴</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="ghost-text" id="ghost-text" aria-hidden="true"></div>
+
+    <div class="header-top">
+      <p class="eyebrow" id="eyebrow">A LITTLE COLLECTION</p>
+      <div class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="46" height="46" rx="10" stroke="currentColor" stroke-width="2"/>
+          <path d="M15 33V15h7.5a6 6 0 0 1 0 12H15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M27 33 34 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header-inner">
+      <h1 id="site-title" class="site-title"><!-- filled by app.js --></h1>
+      <p class="tagline" id="site-tagline">links to the things i keep finding on ebay kleinanzeigen &amp; vinted</p>
+
+      <div class="meta-row">
+        <div class="meta-col">
+          <span class="meta-label">Curated by</span>
+          <span class="meta-value" id="curated-by">Gesa</span>
+        </div>
+        <div class="meta-col">
+          <span class="meta-label">For</span>
+          <span class="meta-value" id="curated-for">an apartment i don't have yet</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-bottom">
+      <span class="header-year" id="year"></span>
+      <span class="header-tag" id="header-category">INTERIOR DESIGN FINDS</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="stat-band">
+      <div class="stat-number" id="stat-number">0</div>
+      <div class="stat-copy">
+        <p class="stat-label">Finds and counting</p>
+        <p class="stat-note">A running wishlist of things i can't stop thinking about.</p>
+      </div>
+    </section>
+
+    <div class="section-label">
+      <span class="section-index">01</span>
+      <h2>The Collection</h2>
+    </div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search" placeholder="SEARCH FINDS..." autocomplete="off" />
+      </div>
+
+      <div class="pills" id="source-pills">
+        <!-- filled by app.js -->
+      </div>
+
+      <div class="chips" id="tag-chips">
+        <!-- filled by app.js -->
+      </div>
+    </div>
+
+    <section id="grid" class="grid">
+      <!-- cards injected here -->
+    </section>
+
+    <div id="empty-state" class="empty-state" hidden>
+      <p class="empty-emoji">🪴</p>
+      <p>No finds match yet — try clearing your filters,</p>
+      <p>or add your first find in <code>data.js</code>.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>MADE WITH CARE, ONE LISTING AT A TIME</span>
+    <span class="footer-right">
+      <a href="add.html">+ ADD A FIND</a>
+      <span id="footer-year"></span>
+    </span>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

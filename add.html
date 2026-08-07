@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Add a Find — Finds Archive</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪴</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-deepest: #050B66;
+    --blue: #0920E9;
+    --blue-mid: #2E42F2;
+    --blue-light: #5A6BF6;
+    --blue-line: rgba(247, 225, 218, 0.22);
+    --cream: #F7E1DA;
+    --cream-card: #FCF2EC;
+    --cream-dim: rgba(247, 225, 218, 0.72);
+    --ink: #10163A;
+    --ink-soft: #5B6591;
+    --line-card: #E9D5CB;
+    --font-display: "Anton", sans-serif;
+    --font-body: "Archivo", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--blue);
+    color: var(--cream);
+    font-family: var(--font-body);
+  }
+
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 1.75rem 5rem;
+  }
+
+  .eyebrow {
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    margin: 0 0 0.9rem;
+  }
+  .eyebrow a { color: var(--cream-dim); }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: clamp(2.6rem, 8vw, 4rem);
+    line-height: 0.88;
+    margin: 0 0 1rem;
+  }
+
+  .intro {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--cream-dim);
+    max-width: 540px;
+    margin: 0 0 2.5rem;
+  }
+
+  /* ---------- card panels ---------- */
+  .panel {
+    background: var(--cream-card);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 14px 30px -14px rgba(5, 11, 102, 0.4);
+  }
+
+  .panel h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    line-height: 1;
+    margin: 0 0 1.25rem;
+    color: var(--ink);
+  }
+
+  /* ---------- form ---------- */
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 620px) {
+    .field-grid { grid-template-columns: 1fr 1fr; }
+    .field-grid .full { grid-column: 1 / -1; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  label {
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  label .opt {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    opacity: 0.75;
+  }
+
+  input, textarea {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: #fff;
+    border: 2px solid var(--line-card);
+    border-radius: 9px;
+    padding: 0.7rem 0.85rem;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(9, 32, 233, 0.14);
+  }
+  textarea { resize: vertical; min-height: 76px; line-height: 1.5; }
+  input::placeholder, textarea::placeholder { color: #A9B0C9; font-weight: 500; }
+
+  .hint {
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  /* image preview */
+  .img-preview {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .img-preview img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--line-card);
+    display: block;
+  }
+  .img-preview.ok { color: #2E7D32; }
+  .img-preview.bad { color: #C62828; }
+
+  /* ---------- buttons ---------- */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+  }
+
+  button {
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.75rem 1.2rem;
+    border-radius: 9px;
+    border: 2px solid var(--blue-deepest);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background: var(--blue-deepest);
+    color: var(--cream);
+  }
+  .btn-primary:hover { background: var(--blue); border-color: var(--blue); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--blue-deepest);
+  }
+  .btn-ghost:hover { background: rgba(5, 11, 102, 0.08); }
+
+  .btn-danger {
+    background: transparent;
+    color: #C62828;
+    border-color: #C62828;
+  }
+  .btn-danger:hover { background: rgba(198, 40, 40, 0.08); }
+
+  /* ---------- messages ---------- */
+  .msg {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.7rem 0.9rem;
+    border-radius: 9px;
+  }
+  .msg.error { background: rgba(198, 40, 40, 0.1); color: #C62828; }
+  .msg.success { background: rgba(46, 125, 50, 0.12); color: #2E7D32; }
+  .msg.info { background: rgba(9, 32, 233, 0.1); color: var(--blue-deepest); }
+
+  .inline-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .inline-row input { flex: 1; min-width: 220px; }
+  .inline-row button { white-space: nowrap; }
+
+  .warn-banner {
+    background: rgba(247, 225, 218, 0.14);
+    border-left: 3px solid var(--cream);
+    padding: 0.85rem 1rem;
+    border-radius: 0 9px 9px 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    color: var(--cream);
+  }
+
+  /* ---------- drafts ---------- */
+  .draft-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .draft-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem;
+    border: 2px solid var(--line-card);
+    border-radius: 11px;
+    background: #fff;
+  }
+
+  .draft-thumb {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 7px;
+    object-fit: cover;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+  }
+
+  .draft-info { flex: 1; min-width: 0; }
+
+  .draft-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1rem;
+    line-height: 1.1;
+    margin: 0 0 0.15rem;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .draft-meta {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .draft-remove {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 1.3rem;
+    line-height: 1;
+    padding: 0.3rem 0.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .draft-remove:hover { background: rgba(198, 40, 40, 0.1); color: #C62828; }
+
+  .empty-drafts {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* ---------- output ---------- */
+  #output {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.55;
+    min-height: 190px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  ol { padding-left: 1.2rem; line-height: 1.8; margin: 0; font-size: 0.92rem; }
+  ol code, p code {
+    background: rgba(5, 11, 102, 0.09);
+    padding: 0.1rem 0.35rem;
+    border-radius: 5px;
+    font-size: 0.88em;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--cream);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Finds Archive · <a href="index.html">back to the board</a></p>
+  <h1>Add a<br>Find</h1>
+  <p class="intro">
+    Fill in the form, hit add, repeat for as many finds as you like. When
+    you're done, copy everything at once and paste it into <code>data.js</code>.
+    No commas or quote marks to get wrong.
+  </p>
+
+  <div class="warn-banner" id="storage-warning" hidden>
+    Heads up: your browser isn't letting this page save drafts, so anything you
+    add will disappear if you refresh. Copy your entries before closing the tab.
+  </div>
+
+  <!-- ============ FETCH FROM LINK ============ -->
+  <section class="panel">
+    <h2>Start from a link</h2>
+    <p class="sub">
+      Paste a listing link and I'll try to pull the title, photo, and price out
+      of it. This only works once your site is published on Vercel — and
+      Kleinanzeigen and Vinted both turn away automated lookups fairly often,
+      so if it comes back empty, use the bookmarklet or just fill the form in
+      yourself.
+    </p>
+    <label for="fetch-url">Listing link</label>
+    <div class="inline-row">
+      <input type="text" id="fetch-url" placeholder="https://www.kleinanzeigen.de/s-anzeige/..." autocomplete="off" />
+      <button type="button" class="btn-primary" id="fetch-btn">Fetch details</button>
+    </div>
+    <div id="fetch-msg"></div>
+  </section>
+
+  <!-- ============ FORM ============ -->
+  <section class="panel">
+    <h2>New find</h2>
+    <form id="find-form" novalidate>
+      <div class="field-grid">
+        <div class="field full">
+          <label for="f-title">Title</label>
+          <input type="text" id="f-title" placeholder="Rattan armchair with cushion" />
+        </div>
+
+        <div class="field">
+          <label for="f-source">Source</label>
+          <input type="text" id="f-source" list="source-options" value="eBay Kleinanzeigen" />
+          <datalist id="source-options">
+            <option value="eBay Kleinanzeigen"></option>
+            <option value="Vinted"></option>
+          </datalist>
+        </div>
+
+        <div class="field">
+          <label for="f-price">Price <span class="opt">(optional)</span></label>
+          <input type="text" id="f-price" placeholder="45 €" />
+        </div>
+
+        <div class="field full">
+          <label for="f-link">Link to the listing</label>
+          <input type="text" id="f-link" placeholder="https://www.kleinanzeigen.de/s-anzeige/..." />
+        </div>
+
+        <div class="field full">
+          <label for="f-image">Photo URL <span class="opt">(optional — right-click the listing photo → "Copy image address")</span></label>
+          <input type="text" id="f-image" placeholder="https://..." />
+          <div class="img-preview" id="img-preview" hidden></div>
+        </div>
+
+        <div class="field full">
+          <label for="f-note">Your note <span class="opt">(optional)</span></label>
+          <textarea id="f-note" placeholder="Would look so good tucked into a corner with a chunky knit throw."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="f-tags">Tags <span class="opt">(comma separated)</span></label>
+          <input type="text" id="f-tags" placeholder="living room, boho, seating" />
+        </div>
+
+        <div class="field">
+          <label for="f-date">Date added</label>
+          <input type="date" id="f-date" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn-primary">+ Add to list</button>
+        <button type="button" class="btn-ghost" id="clear-form">Clear form</button>
+      </div>
+
+      <div id="form-msg"></div>
+    </form>
+  </section>
+
+  <!-- ============ DRAFTS ============ -->
+  <section class="panel">
+    <h2>Your list (<span id="draft-count">0</span>)</h2>
+    <ul class="draft-list" id="draft-list"></ul>
+    <p class="empty-drafts" id="empty-drafts">Nothing added yet — fill in the form above to get started.</p>
+
+    <div class="btn-row">
+      <button type="button" class="btn-primary" id="copy-all">Copy all for data.js</button>
+      <button type="button" class="btn-danger" id="clear-all">Clear list</button>
+    </div>
+    <div id="copy-msg"></div>
+  </section>
+
+  <!-- ============ BULK IMPORT ============ -->
+  <section class="panel">
+    <h2>Import a whole list</h2>
+    <p class="sub">
+      Used the "Grab whole list" bookmarklet on your Merkliste or Vinted
+      favourites? Paste what it gave you here to load everything into your list
+      at once — then you can add notes and tags to each one. Anything already in
+      your list gets skipped.
+    </p>
+    <textarea id="import-box" placeholder="Paste the entries you copied here…" spellcheck="false"></textarea>
+    <div class="btn-row">
+      <button type="button" class="btn-primary" id="import-btn">Load into my list</button>
+    </div>
+    <div id="import-msg"></div>
+  </section>
+
+  <!-- ============ OUTPUT ============ -->
+  <section class="panel">
+    <h2>Ready to paste</h2>
+    <textarea id="output" readonly spellcheck="false"></textarea>
+    <ol style="margin-top:1.25rem">
+      <li>Open <code>data.js</code> in a text editor.</li>
+      <li>Scroll to the bottom and paste this just above the closing <code>];</code>.</li>
+      <li>Save the file — your finds are live.</li>
+    </ol>
+  </section>
+
+  <a class="back-link" href="index.html">← back to the board</a>
+</main>
+
+<script>
+(function () {
+  var STORAGE_KEY = "findsArchiveDrafts";
+  var drafts = [];
+  var canStore = true;
+
+  // ---------- storage (graceful if blocked) ----------
+  try {
+    localStorage.setItem("__test__", "1");
+    localStorage.removeItem("__test__");
+  } catch (e) {
+    canStore = false;
+    document.getElementById("storage-warning").hidden = false;
+  }
+
+  function loadDrafts() {
+    if (!canStore) return;
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) drafts = JSON.parse(raw) || [];
+    } catch (e) { drafts = []; }
+  }
+
+  function saveDrafts() {
+    if (!canStore) return;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(drafts)); } catch (e) {}
+  }
+
+  // ---------- helpers ----------
+  function $(id) { return document.getElementById(id); }
+
+  function escapeHTML(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // escape for embedding inside a double-quoted JS string in data.js
+  function escapeJS(str) {
+    return String(str == null ? "" : str)
+      .replace(/\\/g, "\\\\")
+      .replace(/"/g, '\\"')
+      .replace(/\r?\n/g, " ")
+      .trim();
+  }
+
+  function todayISO() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
+
+  function showMsg(containerId, text, kind) {
+    var el = $(containerId);
+    if (!text) { el.innerHTML = ""; return; }
+    el.innerHTML = '<div class="msg ' + kind + '">' + escapeHTML(text) + "</div>";
+    if (kind === "success") {
+      setTimeout(function () {
+        if (el.textContent === text) el.innerHTML = "";
+      }, 3500);
+    }
+  }
+
+  // ---------- output generation ----------
+  function entryFor(f) {
+    var tagList = (f.tags || [])
+      .map(function (t) { return '"' + escapeJS(t) + '"'; })
+      .join(", ");
+    return (
+      "  {\n" +
+      '    title: "' + escapeJS(f.title) + '",\n' +
+      '    source: "' + escapeJS(f.source) + '",\n' +
+      '    link: "' + escapeJS(f.link) + '",\n' +
+      '    price: "' + escapeJS(f.price) + '",\n' +
+      '    image: "' + escapeJS(f.image) + '",\n' +
+      '    note: "' + escapeJS(f.note) + '",\n' +
+      "    tags: [" + tagList + "],\n" +
+      '    dateAdded: "' + escapeJS(f.dateAdded) + '",\n' +
+      "  },"
+    );
+  }
+
+  function buildOutput() {
+    if (!drafts.length) {
+      return "// Nothing added yet — your entries will appear here.";
+    }
+    return drafts.map(entryFor).join("\n");
+  }
+
+  // ---------- rendering ----------
+  function render() {
+    $("draft-count").textContent = drafts.length;
+    $("empty-drafts").hidden = drafts.length > 0;
+
+    var list = $("draft-list");
+    list.innerHTML = drafts
+      .map(function (f, i) {
+        var thumb = f.image
+          ? '<img class="draft-thumb" src="' + escapeHTML(f.image) + '" alt="" ' +
+            "onerror=\"this.outerHTML='<div class=\\'draft-thumb\\'>🪴</div>'\" />"
+          : '<div class="draft-thumb">🪴</div>';
+        var metaBits = [f.source, f.price, f.dateAdded].filter(Boolean).join(" · ");
+        return (
+          '<li class="draft-item">' +
+          thumb +
+          '<div class="draft-info">' +
+          '<p class="draft-title">' + escapeHTML(f.title) + "</p>" +
+          '<p class="draft-meta">' + escapeHTML(metaBits) + "</p>" +
+          "</div>" +
+          '<button type="button" class="draft-remove" data-index="' + i + '" title="Remove">×</button>' +
+          "</li>"
+        );
+      })
+      .join("");
+
+    list.querySelectorAll(".draft-remove").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        drafts.splice(Number(btn.dataset.index), 1);
+        saveDrafts();
+        render();
+      });
+    });
+
+    $("output").value = buildOutput();
+  }
+
+  // ---------- image preview ----------
+  var imageInput = $("f-image");
+  var previewEl = $("img-preview");
+  var previewTimer = null;
+
+  function updatePreview() {
+    var url = imageInput.value.trim();
+    clearTimeout(previewTimer);
+    if (!url) {
+      previewEl.hidden = true;
+      previewEl.innerHTML = "";
+      return;
+    }
+    previewTimer = setTimeout(function () {
+      previewEl.hidden = false;
+      previewEl.className = "img-preview";
+      previewEl.innerHTML = "<span>checking photo…</span>";
+      var img = new Image();
+      img.onload = function () {
+        previewEl.className = "img-preview ok";
+        previewEl.innerHTML = "";
+        previewEl.appendChild(img);
+        var span = document.createElement("span");
+        span.textContent = "Photo loads — looking good.";
+        previewEl.appendChild(span);
+      };
+      img.onerror = function () {
+        previewEl.className = "img-preview bad";
+        previewEl.innerHTML =
+          "<span>This photo won't load here. Leave the field empty and a placeholder will show instead.</span>";
+      };
+      img.src = url;
+    }, 500);
+  }
+
+  imageInput.addEventListener("input", updatePreview);
+
+  // ---------- form ----------
+  function readForm() {
+    return {
+      title: $("f-title").value.trim(),
+      source: $("f-source").value.trim(),
+      link: $("f-link").value.trim(),
+      price: $("f-price").value.trim(),
+      image: $("f-image").value.trim(),
+      note: $("f-note").value.trim(),
+      tags: $("f-tags").value
+        .split(",")
+        .map(function (t) { return t.trim(); })
+        .filter(Boolean),
+      dateAdded: $("f-date").value || todayISO(),
+    };
+  }
+
+  function resetForm(keepSource) {
+    var source = $("f-source").value;
+    $("find-form").reset();
+    $("f-date").value = todayISO();
+    $("f-source").value = keepSource ? source : "eBay Kleinanzeigen";
+    previewEl.hidden = true;
+    previewEl.innerHTML = "";
+  }
+
+  $("find-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var find = readForm();
+
+    if (!find.title) {
+      showMsg("form-msg", "Give it a title first — that's the only thing I really need.", "error");
+      $("f-title").focus();
+      return;
+    }
+    if (!find.link) {
+      showMsg("form-msg", "Add the link to the listing so you can find your way back to it.", "error");
+      $("f-link").focus();
+      return;
+    }
+
+    drafts.push(find);
+    saveDrafts();
+    render();
+    resetForm(true);
+    showMsg("form-msg", "Added — " + find.title, "success");
+    $("f-title").focus();
+  });
+
+  $("clear-form").addEventListener("click", function () {
+    resetForm(false);
+    showMsg("form-msg", "", "");
+  });
+
+  // ---------- copy + clear ----------
+  $("copy-all").addEventListener("click", function () {
+    if (!drafts.length) {
+      showMsg("copy-msg", "Nothing to copy yet.", "error");
+      return;
+    }
+    var text = buildOutput();
+    var outputEl = $("output");
+
+    function fallbackCopy() {
+      outputEl.removeAttribute("readonly");
+      outputEl.select();
+      outputEl.setSelectionRange(0, text.length);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      outputEl.setAttribute("readonly", "readonly");
+      return ok;
+    }
+
+    function done(ok) {
+      showMsg(
+        "copy-msg",
+        ok
+          ? "Copied " + drafts.length + " " + (drafts.length === 1 ? "find" : "finds") +
+            " — now paste it into data.js above the closing ];"
+          : "Couldn't copy automatically — select the text in the box below and copy it manually.",
+        ok ? "success" : "error"
+      );
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () { done(true); },
+        function () { done(fallbackCopy()); }
+      );
+    } else {
+      done(fallbackCopy());
+    }
+  });
+
+  $("clear-all").addEventListener("click", function () {
+    if (!drafts.length) return;
+    if (!window.confirm("Clear all " + drafts.length + " drafts? This can't be undone.")) return;
+    drafts = [];
+    saveDrafts();
+    render();
+    showMsg("copy-msg", "List cleared.", "success");
+  });
+
+  // ---------- fetch details from a pasted link ----------
+  $("fetch-btn").addEventListener("click", function () {
+    var url = $("fetch-url").value.trim();
+    if (!url) {
+      showMsg("fetch-msg", "Paste a link first.", "error");
+      return;
+    }
+    if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+
+    var btn = $("fetch-btn");
+    btn.disabled = true;
+    btn.textContent = "Looking…";
+    showMsg("fetch-msg", "Fetching that listing…", "info");
+
+    function finish() {
+      btn.disabled = false;
+      btn.textContent = "Fetch details";
+    }
+
+    fetch("/api/listing?url=" + encodeURIComponent(url))
+      .then(function (r) {
+        var ct = r.headers.get("content-type") || "";
+        if (ct.indexOf("application/json") === -1) throw new Error("no-api");
+        return r.json();
+      })
+      .then(function (data) {
+        finish();
+        if (data && data.ok) {
+          if (data.title) $("f-title").value = data.title;
+          if (data.source) $("f-source").value = data.source;
+          $("f-link").value = data.link || url;
+          if (data.price) $("f-price").value = data.price;
+          if (data.image) $("f-image").value = data.image;
+          updatePreview();
+          showMsg("fetch-msg", "Got it — check the details below, add a note and tags, then hit add.", "success");
+          $("f-note").focus();
+        } else {
+          $("f-link").value = url;
+          showMsg(
+            "fetch-msg",
+            (data && data.error ? data.error + " " : "") +
+              "I've put the link in the form — fill in the rest by hand, or use the bookmarklet, which reads the page from your own browser and doesn't get turned away.",
+            "error"
+          );
+        }
+      })
+      .catch(function () {
+        finish();
+        $("f-link").value = url;
+        showMsg(
+          "fetch-msg",
+          "The lookup helper isn't running here — it only works on the published Vercel site, not when you open this file directly. I've put the link in the form; fill in the rest by hand, or use the bookmarklet.",
+          "error"
+        );
+      });
+  });
+
+  $("fetch-url").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("fetch-btn").click(); }
+  });
+
+  // ---------- import a whole grabbed list ----------
+  function parseEntries(text) {
+    var blocks = text.match(/\{[^{}]*\}/g) || [];
+    var out = [];
+
+    blocks.forEach(function (block) {
+      function field(name) {
+        var m = block.match(new RegExp(name + '\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"'));
+        return m ? m[1].replace(/\\(["\\])/g, "$1") : "";
+      }
+
+      var tags = [];
+      var tagMatch = block.match(/tags\s*:\s*\[([^\]]*)\]/);
+      if (tagMatch && tagMatch[1].trim()) {
+        tags = (tagMatch[1].match(/"((?:[^"\\]|\\.)*)"/g) || []).map(function (s) {
+          return s.slice(1, -1).replace(/\\(["\\])/g, "$1");
+        });
+      }
+
+      var link = field("link");
+      var title = field("title");
+      if (!link && !title) return;
+
+      out.push({
+        title: title || "Untitled find",
+        source: field("source"),
+        link: link,
+        price: field("price"),
+        image: field("image"),
+        note: field("note"),
+        tags: tags,
+        dateAdded: field("dateAdded") || todayISO(),
+      });
+    });
+
+    return out;
+  }
+
+  $("import-btn").addEventListener("click", function () {
+    var text = $("import-box").value;
+    if (!text.trim()) {
+      showMsg("import-msg", "Paste something in the box first.", "error");
+      return;
+    }
+
+    var parsed = parseEntries(text);
+    if (!parsed.length) {
+      showMsg(
+        "import-msg",
+        "Couldn't find any finds in that. Make sure you pasted the whole block, curly brackets and all.",
+        "error"
+      );
+      return;
+    }
+
+    var known = {};
+    drafts.forEach(function (d) { if (d.link) known[d.link] = true; });
+
+    var added = 0, skipped = 0;
+    parsed.forEach(function (f) {
+      if (f.link && known[f.link]) { skipped++; return; }
+      if (f.link) known[f.link] = true;
+      drafts.push(f);
+      added++;
+    });
+
+    saveDrafts();
+    render();
+    $("import-box").value = "";
+    showMsg(
+      "import-msg",
+      "Loaded " + added + " " + (added === 1 ? "find" : "finds") +
+        (skipped ? " — skipped " + skipped + " already in your list." : ".") +
+        " Add notes and tags below, then copy everything for data.js.",
+      "success"
+    );
+  });
+
+  // ---------- prefill from URL (used by the bookmarklet) ----------
+  function applyPrefill() {
+    var params = new URLSearchParams(window.location.search);
+    if (![...params.keys()].length) return;
+    var map = {
+      title: "f-title",
+      source: "f-source",
+      link: "f-link",
+      price: "f-price",
+      image: "f-image",
+      note: "f-note",
+      tags: "f-tags",
+    };
+    var filled = false;
+    Object.keys(map).forEach(function (key) {
+      var val = params.get(key);
+      if (val) { $(map[key]).value = val; filled = true; }
+    });
+    if (filled) {
+      updatePreview();
+      showMsg("form-msg", "Prefilled from the listing — add a note and tags, then hit add.", "success");
+    }
+  }
+
+  // ---------- init ----------
+  $("f-date").value = todayISO();
+  loadDrafts();
+  render();
+  applyPrefill();
+})();
+</script>
+</body>
+</html>

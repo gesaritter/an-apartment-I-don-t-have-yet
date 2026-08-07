@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Add to Finds — bookmarklet setup</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪴</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0920E9;
+    --blue-deepest: #050B66;
+    --cream: #F7E1DA;
+    --cream-card: #FCF2EC;
+    --cream-dim: rgba(247, 225, 218, 0.72);
+    --ink: #10163A;
+    --ink-soft: #5B6591;
+    --line-card: #E9D5CB;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--blue);
+    color: var(--cream);
+    font-family: "Archivo", sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 3rem 1.75rem 5rem; }
+  h1 {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+    line-height: 0.9;
+    margin: 0 0 1rem;
+  }
+  p { line-height: 1.6; font-size: 1rem; }
+  .eyebrow {
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    margin: 0 0 0.9rem;
+  }
+  .eyebrow a { color: var(--cream-dim); }
+  .intro { color: var(--cream-dim); max-width: 560px; }
+
+  .panel {
+    background: var(--cream-card);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 1.75rem;
+    margin: 2rem 0;
+    box-shadow: 0 14px 30px -14px rgba(5, 11, 102, 0.4);
+  }
+  .panel h2 {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    margin: 0 0 0.6rem;
+  }
+  .panel .sub { font-size: 0.9rem; color: var(--ink-soft); margin: 0 0 1.1rem; line-height: 1.55; }
+
+  label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.35rem;
+  }
+  input[type="text"] {
+    font-family: "Archivo", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: #fff;
+    border: 2px solid var(--line-card);
+    border-radius: 9px;
+    padding: 0.7rem 0.85rem;
+    width: 100%;
+    outline: none;
+  }
+  input[type="text"]:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(9, 32, 233, 0.14);
+  }
+  input::placeholder { color: #A9B0C9; font-weight: 500; }
+
+  .drop-zone {
+    margin-top: 1.5rem;
+    padding: 1.75rem 1rem;
+    border: 2px dashed var(--line-card);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .bookmarklet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    color: var(--cream);
+    background: var(--blue-deepest);
+    padding: 0.9rem 1.6rem;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 0 10px 24px -10px rgba(5, 11, 102, 0.5);
+  }
+  .bookmarklet-btn:active { cursor: grabbing; }
+  .hint { margin-top: 0.9rem; font-size: 0.84rem; color: var(--ink-soft); }
+  .mode {
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .mode.form { color: #2E7D32; }
+  .mode.copy { color: var(--ink-soft); }
+
+  ol { padding-left: 1.2rem; line-height: 1.85; }
+  ol li strong { color: var(--cream); }
+  code {
+    background: rgba(247, 225, 218, 0.15);
+    padding: 0.15rem 0.4rem;
+    border-radius: 5px;
+    font-size: 0.9em;
+  }
+  .panel code { background: rgba(5, 11, 102, 0.09); }
+  .note-box {
+    border-left: 3px solid var(--cream);
+    padding-left: 1rem;
+    margin: 2rem 0;
+    font-size: 0.92rem;
+    color: rgba(247, 225, 218, 0.85);
+    line-height: 1.6;
+  }
+  .back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--cream);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Finds Archive · <a href="index.html">back to the board</a></p>
+    <h1>Add to<br>Finds</h1>
+    <p class="intro">
+      Two buttons for your bookmarks bar. One grabs the single listing you're
+      looking at; the other reads your whole saved-items page in one go. Both
+      work by reading the page in your own browser, so nothing gets blocked.
+    </p>
+
+    <div class="panel">
+      <h2>One at a time · Where does your site live?</h2>
+      <p class="sub">
+        Paste the address of your published site (the Vercel or GitHub Pages
+        link). This lets the button open your add form directly. Leave it empty
+        if you haven't published yet — the button will hand you a copy-paste
+        snippet instead.
+      </p>
+      <label for="site-url">Your site address</label>
+      <input type="text" id="site-url" placeholder="https://my-finds.vercel.app" autocomplete="off" />
+
+      <div class="drop-zone">
+        <a class="bookmarklet-btn" id="bookmarklet-link" href="#">✛ Add to Finds</a>
+        <p class="hint">☝︎ drag this button up to your bookmarks bar — don't click it here</p>
+        <p class="mode copy" id="mode-label">Mode: copy-paste snippet (no site address set)</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>The other one · Grab a whole list</h2>
+      <p class="sub">
+        This is the big time-saver. Drag this second button up to your bookmarks
+        bar too. Click it while you're <strong>on</strong> your Merkliste or
+        Vinted favourites page and it reads every saved item on the page at
+        once — no site address needed, and nothing gets blocked because it's
+        reading the page in your own browser.
+      </p>
+
+      <div class="drop-zone">
+        <a class="bookmarklet-btn" id="bulk-link" href="#">⛏ Grab whole list</a>
+        <p class="hint">☝︎ drag this one up to your bookmarks bar as well</p>
+        <p class="mode form">Scroll to the bottom of your list first — it can only see items the page has actually loaded.</p>
+      </div>
+    </div>
+
+    <h2 style="font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.6rem;margin:2.5rem 0 1rem;">Using them</h2>
+
+    <p style="font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem;margin-bottom:.5rem;">Your whole list at once</p>
+    <ol>
+      <li><strong>Show your bookmarks bar</strong> if it's hidden (<code>Ctrl+Shift+B</code> on Windows, <code>Cmd+Shift+B</code> on Mac) and drag both buttons above onto it.</li>
+      <li>Open your <strong>Merkliste</strong> (<code>kleinanzeigen.de/m-merkliste.html</code>) or <strong>Vinted favourites</strong> (<code>vinted.de/member/items/favourite_list</code>).</li>
+      <li><strong>Scroll all the way to the bottom</strong> so every saved item actually loads onto the page.</li>
+      <li>Click <strong>⛏ Grab whole list</strong>. A box appears showing everything it found.</li>
+      <li>Hit <strong>Copy all</strong>, then paste it into the <strong>"Import a whole list"</strong> box on your add page — or straight into <code>data.js</code> if you don't want to add notes.</li>
+    </ol>
+
+    <p style="font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem;margin:2rem 0 .5rem;">A single listing</p>
+    <ol>
+      <li>Open one listing page.</li>
+      <li>Click <strong>✛ Add to Finds</strong>.</li>
+      <li>Your add form opens with the title, link, photo, and price filled in — <strong>write your note, add tags, hit add</strong>.</li>
+    </ol>
+
+    <div class="note-box">
+      Titles, prices, and photos are best-effort guesses read off the page
+      layout, so give them a glance before saving. If either site redesigns its
+      pages the grabber may start missing things — that's fixable, it just needs
+      the selectors updated.
+    </div>
+
+    <a class="back-link" href="add.html">→ go to the add form</a>
+  </main>
+
+<script>
+(function () {
+  // Compact source of the bookmarklet. BASE is injected below.
+  var BODY = [
+    'function m(n){var e=document.querySelector(\'meta[property="\'+n+\'"]\')||document.querySelector(\'meta[name="\'+n+\'"]\');return e?e.getAttribute("content"):""}',
+    'function p(){var c=document.querySelector(\'meta[property="product:price:amount"]\')||document.querySelector("[itemprop=\'price\']")||document.querySelector("[data-testid*=\'price\' i]");if(c){var v=c.getAttribute("content")||c.getAttribute("data-price")||c.textContent;if(v&&v.trim())return v.trim()}var t=(document.body.innerText||"").match(/(\\d{1,3}(?:[.,]\\d{3})*(?:[.,]\\d{2})?)\\s?(\\u20AC|EUR)/i);return t?t[1]+" \\u20AC":""}',
+    'function g(){var o=m("og:image");if(o)return o;var i=document.querySelector("img");return i?i.src:""}',
+    'function s(h){return h.indexOf("vinted")>-1?"Vinted":h.indexOf("kleinanzeigen")>-1?"eBay Kleinanzeigen":h}',
+    'function x(v){return String(v||"").replace(/\\\\/g,"\\\\\\\\").replace(/"/g,\'\\\\"\')}',
+    'var f={title:m("og:title")||document.title||"",source:s(location.hostname),link:location.href,price:p(),image:g()};',
+    'if(BASE){var q=Object.keys(f).map(function(k){return k+"="+encodeURIComponent(f[k])}).join("&");window.open(BASE.replace(/\\/+$/,"")+"/add.html?"+q,"_blank");return}',
+    'var d=new Date().toISOString().slice(0,10);',
+    'window.prompt("Copy this, then paste it into data.js:","  {\\n    title: \\""+x(f.title)+"\\",\\n    source: \\""+x(f.source)+"\\",\\n    link: \\""+x(f.link)+"\\",\\n    price: \\""+x(f.price)+"\\",\\n    image: \\""+x(f.image)+"\\",\\n    note: \\"\\",\\n    tags: [],\\n    dateAdded: \\""+d+"\\",\\n  },");'
+  ].join("");
+
+  var linkEl = document.getElementById("bookmarklet-link");
+  var inputEl = document.getElementById("site-url");
+  var modeEl = document.getElementById("mode-label");
+
+  function build() {
+    var base = inputEl.value.trim();
+    if (base && !/^https?:\/\//i.test(base)) base = "https://" + base;
+
+    var code = "(function(){var BASE=" + JSON.stringify(base) + ";" + BODY + "})();";
+    linkEl.setAttribute("href", "javascript:" + encodeURIComponent(code));
+
+    if (base) {
+      modeEl.className = "mode form";
+      modeEl.textContent = "Mode: opens your add form at " + base;
+    } else {
+      modeEl.className = "mode copy";
+      modeEl.textContent = "Mode: copy-paste snippet (no site address set)";
+    }
+  }
+
+  inputEl.addEventListener("input", build);
+
+  linkEl.addEventListener("click", function (e) {
+    e.preventDefault();
+    alert("Don't click it here — drag this button up to your bookmarks bar, then click it while you're on a listing page.");
+  });
+
+  // ----- the whole-list grabber (self-contained, no site address needed) -----
+  var BULK_CODE = "!function(){function e(e){return String(e||\"\").replace(/\\s+/g,\" \").trim()}function t(e){return String(e||\"\").replace(/\\\\/g,\"\\\\\\\\\").replace(/\"/g,'\\\\\"')}function n(e){for(var t=Array.prototype.slice.call(e.querySelectorAll(\"img\")),n=0;n<t.length;n++){var r=t[n],i=r.currentSrc||r.getAttribute(\"src\")||r.getAttribute(\"data-src\")||r.getAttribute(\"data-imgsrc\")||\"\";if(!i&&r.getAttribute(\"srcset\")&&(i=r.getAttribute(\"srcset\").split(\",\")[0].trim().split(\" \")[0]),i&&0!==i.indexOf(\"data:\")&&!(r.naturalWidth&&r.naturalWidth<40))try{return new URL(i,location.href).href}catch(e){return i}}return\"\"}function r(t){return e(String(t||\"\").replace(/[,·|–-]?\\s*\\d{1,3}(?:[.\\s]\\d{3})*(?:,\\d{2})?\\s?(?:€|EUR)\\s*$/i,\"\"))}function i(e,t){for(var n=t.querySelector(\"img[alt]\"),i=t.querySelector(\"h1,h2,h3,h4,[class*='title' i],[class*='Title']\"),a=[e.getAttribute(\"aria-label\"),n?n.getAttribute(\"alt\"):\"\",i?i.textContent:\"\",e.getAttribute(\"title\"),e.textContent],o=0;o<a.length;o++){var l=r(a[o]);if(l&&l.length>2&&l.length<160&&!/^\\d+$/.test(l))return l}return\"Untitled find\"}function a(t){var n=e(t.innerText||t.textContent||\"\"),r=n.match(/(\\d{1,3}(?:[.\\s]\\d{3})*(?:,\\d{2})?|\\d+(?:[.,]\\d{2})?)\\s?(?:€|EUR)/i);return r?e(r[1])+\" €\":/zu verschenken|verschenken|gratis/i.test(n)?\"Zu verschenken\":\"\"}var o,l,d,c={},s=[],u=(o=location.hostname).indexOf(\"vinted\")>-1?\"Vinted\":o.indexOf(\"kleinanzeigen\")>-1?\"eBay Kleinanzeigen\":o.replace(/^www\\./,\"\"),p=(new Date).toISOString().slice(0,10);(l=location.hostname,d=null,l.indexOf(\"kleinanzeigen\")>-1?d='a[href*=\"/s-anzeige/\"]':l.indexOf(\"vinted\")>-1&&(d='a[href*=\"/items/\"]'),d?Array.prototype.slice.call(document.querySelectorAll(d)):Array.prototype.slice.call(document.querySelectorAll(\"a[href]\")).filter(function(e){return e.querySelector(\"img\")})).forEach(function(e){var t=e.getAttribute(\"href\");if(t){var r=function(e){try{var t=new URL(e,location.href);return t.hash=\"\",t.search=\"\",t.href}catch(t){return e}}(t);if(!c[r]){c[r]=!0;var o=function(e){for(var t=e,n=null,r=0;r<7&&t;r++){var i=!!t.querySelector(\"img\"),a=/€|EUR|verschenken|gratis|free/i.test(t.innerText||t.textContent||\"\");if(i&&a)return t;i&&!n&&(n=t),t=t.parentElement}return n||e.parentElement||e}(e);s.push({title:i(e,o),source:u,link:r,price:a(o),image:n(o),note:\"\",tags:[],dateAdded:p})}}});var g=s.map(function(e){return'  {\\n    title: \"'+t(e.title)+'\",\\n    source: \"'+t(e.source)+'\",\\n    link: \"'+t(e.link)+'\",\\n    price: \"'+t(e.price)+'\",\\n    image: \"'+t(e.image)+'\",\\n    note: \"\",\\n    tags: [],\\n    dateAdded: \"'+t(e.dateAdded)+'\",\\n  },'}).join(\"\\n\"),f=document.getElementById(\"__finds_grabber__\");f&&f.remove();var h=document.createElement(\"div\");h.id=\"__finds_grabber__\",h.setAttribute(\"style\",[\"position:fixed\",\"inset:0\",\"z-index:2147483647\",\"background:rgba(5,11,102,0.72)\",\"display:flex\",\"align-items:center\",\"justify-content:center\",\"padding:24px\",\"font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif\"].join(\";\"));var m=document.createElement(\"div\");m.setAttribute(\"style\",[\"background:#FCF2EC\",\"color:#10163A\",\"border-radius:16px\",\"max-width:720px\",\"width:100%\",\"max-height:80vh\",\"display:flex\",\"flex-direction:column\",\"padding:24px\",\"box-shadow:0 24px 60px rgba(0,0,0,0.4)\"].join(\";\"));var x=document.createElement(\"div\");x.setAttribute(\"style\",\"font-size:20px;font-weight:800;margin-bottom:6px\"),x.textContent=s.length?\"Found \"+s.length+\" listing\"+(1===s.length?\"\":\"s\"):\"Couldn't find any listings on this page\";var y=document.createElement(\"div\");y.setAttribute(\"style\",\"font-size:13px;line-height:1.5;color:#5B6591;margin-bottom:14px\"),y.textContent=s.length?\"Copy this, then paste it into data.js above the closing ]; — or into the import box on your add page. Scrolled to the bottom of your list first? Anything not loaded yet won't be here.\":\"Make sure you're on your saved-items page (Merkliste or favourites) and that you've scrolled far enough for the items to load.\";var v=document.createElement(\"textarea\");v.readOnly=!0,v.value=g||\"\",v.setAttribute(\"style\",[\"width:100%\",\"flex:1\",\"min-height:220px\",\"font-family:ui-monospace,Menlo,Consolas,monospace\",\"font-size:12px\",\"line-height:1.5\",\"padding:12px\",\"border:2px solid #E9D5CB\",\"border-radius:10px\",\"background:#fff\",\"color:#10163A\",\"resize:vertical\",\"white-space:pre\"].join(\";\"));var b=document.createElement(\"div\");function A(e,t,n,r){var i=document.createElement(\"button\");return i.textContent=e,i.setAttribute(\"style\",[\"font-family:inherit\",\"font-size:13px\",\"font-weight:800\",\"letter-spacing:0.04em\",\"text-transform:uppercase\",\"padding:11px 18px\",\"border-radius:9px\",\"cursor:pointer\",\"background:\"+t,\"color:\"+n,\"border:2px solid \"+r].join(\";\")),i}b.setAttribute(\"style\",\"display:flex;gap:10px;margin-top:14px;flex-wrap:wrap\");var C=A(\"Copy all\",\"#050B66\",\"#F7E1DA\",\"#050B66\"),E=A(\"Close\",\"transparent\",\"#050B66\",\"#050B66\");C.addEventListener(\"click\",function(){v.removeAttribute(\"readonly\"),v.select(),v.setSelectionRange(0,v.value.length);var e=!1;try{e=document.execCommand(\"copy\")}catch(t){e=!1}v.setAttribute(\"readonly\",\"readonly\"),e||!navigator.clipboard?C.textContent=e?\"Copied!\":\"Copy failed — select manually\":navigator.clipboard.writeText(v.value).then(function(){C.textContent=\"Copied!\"},function(){C.textContent=\"Copy failed — select manually\"})}),E.addEventListener(\"click\",function(){h.remove()}),h.addEventListener(\"click\",function(e){e.target===h&&h.remove()}),b.appendChild(C),b.appendChild(E),m.appendChild(x),m.appendChild(y),s.length&&m.appendChild(v),m.appendChild(b),h.appendChild(m),document.body.appendChild(h),s.length&&v.focus()}();";
+  var bulkEl = document.getElementById("bulk-link");
+  bulkEl.setAttribute("href", "javascript:" + encodeURIComponent(BULK_CODE));
+  bulkEl.addEventListener("click", function (e) {
+    e.preventDefault();
+    alert("Drag this button to your bookmarks bar, then click it while you're on your Merkliste or Vinted favourites page.");
+  });
+
+  build();
+})();
+</script>
+</body>
+</html>
