@@ -14,9 +14,9 @@
 // ---------------------------------------------------------------
 const SITE_CONFIG = {
   eyebrow: "a little collection",
-  title: "Finds Archive",
+  title: "Things I don't have space in my apartment for but I wish I did",
   tagline:
-    "ebay kleinanzeigen & vinted finds i keep thinking about — an apartment i don't have, filled with things i found.",
+    "ebay kleinanzeigen & vinted finds i keep thinking about and either don't have the space or money for :(",
   curatedBy: "Gesa",
   curatedFor: "an apartment i don't have yet",
   category: "Interior Design Finds",
