@@ -108,12 +108,12 @@ html, body {
   font-weight: 500;
   text-transform: uppercase;
   color: var(--cream);
-  margin: 0;
+  margin: 1;
   /* Starting size â€” app.js then measures the real font and scales this up so
      the headline fills the width across a few lines, whatever its length. */
   font-size: clamp(2.9rem, 10vw, 9rem);
   line-height: 1.06;
-  letter-spacing: 1rem;
+  letter-spacing: 0.5rem;
   overflow-wrap: break-word;
 }
 
