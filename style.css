@@ -105,7 +105,7 @@ html, body {
 
 .site-title {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 600;
   text-transform: uppercase;
   color: var(--cream);
   margin: 0;
